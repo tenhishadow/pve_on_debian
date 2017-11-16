@@ -1,7 +1,21 @@
 pve_on_debian
 =========
 
-This role will install on Debian system (current Stretch)
+This role will install on Debian system 
+
+It's just an automation for this https://pve.proxmox.com/wiki/Install_Proxmox_VE_on_Debian_Stretch and some additionals to make system usable(Configure journald,chronyd)
+It was writed to be applicable to all versions of Debian and Proxmox(but I haven't tested it :) ). 
+You can override defaults in your playbook to use other versions:
+	- debian_version
+	- debian_repo
+	- pve_repo_keyurl
+	- pve_repo_keyring
+
+At first role will do all from https://pve.proxmox.com/wiki/Install_Proxmox_VE_on_Debian_Stretch excluding installation of open-iscsi.
+I have excluded package open-iscsi from installation because I don't use it and it shows warnings without configuring.
+
+During performing tasks role will configure bridge for VMs(default is vmbr0) using bridge-utils. 
+You can easly reconfigure it somehow else by modifying templates/interfaces.j2
 
 Requirements
 ------------
@@ -16,11 +30,13 @@ A description of the settable variables for this role should go here, including 
 ```
 defaults/main.yml:
 	ntp_pool: pool.ntp.org				# Pool of ntp-servers
-	timzone: Europe/Moscow				# Default timezone
+	timezone: Europe/Moscow				# Default timezone
 	debian_version: stretch				# Default release
 	debian_repo: "http://mirror.yandex.ru/debian/"	# Default repo address
 	add_pve-no-subscription: True			# Add pve-no-subscription repository
 	disable_pve-enterprise: True			# Disable commercial repo
+	pve_repo_keyurl					# repo key url
+	pve_repo_keyring				# gpg keyring
 playbook vars( must be declared ):
 	proxmox_ip			# ip address for new instance of Proxmox
 	proxmox_mask			# network mask
