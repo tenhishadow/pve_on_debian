@@ -44,14 +44,12 @@ Example Playbook
   vars:
     - proxmox_physnet: eth0
     - proxmox_bridge: vmbr0
-    - proxmox_ip: 192.168.1.253
+    - proxmox_ip: 192.168.102.51 
     - proxmox_mask: 255.255.255.0
-    - proxmox_gateway: 192.168.1.254
+    - proxmox_gateway: 192.168.102.1
     - proxmox_hostname_fdqn: proxmox.testlab.lan
-  vars_files:
-    - users.yml
   roles:
-    - proxmox_deploy
+    - tenhishadow.pve_on_debian
 ...
 ```
 
