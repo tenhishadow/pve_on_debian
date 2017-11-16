@@ -13,6 +13,7 @@ Role Variables
 --------------
 
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```
 defaults/main.yml:
 	ntp_pool: pool.ntp.org				# Pool of ntp-servers
 	timzone: Europe/Moscow				# Default timezone
@@ -27,7 +28,7 @@ playbook vars( must be declared ):
 	proxmox_physnet			# physical network for bridge (e.g. eth0)
 	proxmox_bridge			# name of the virtual bridge (e.g. vmbr0)
 	proxmox_hostname_fdqn		# fqdn for new Proxmox
-
+```
 Dependencies
 ------------
 
