@@ -1,0 +1,6 @@
+---
+# Install and configure PVE
+- include: proxmox.yml
+
+# Configure system
+- include: system.yml

@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+
+
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+auto {{ proxmox_physnet }}
+iface {{ proxmox_physnet }} inet manual
+
+auto {{ proxmox_bridge }}
+iface {{ proxmox_bridge }} inet static
+ address  {{ proxmox_ip }}
+ netmask  {{ proxmox_mask }}
+ gateway  {{ proxmox_gateway }}
+ bridge_ports {{ proxmox_physnet }}
+ bridge_stp off
+ bridge_fd 0

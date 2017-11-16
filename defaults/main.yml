@@ -1,0 +1,9 @@
+---
+ntp_pool: "pool.ntp.org"
+timezone: "Europe/Moscow"
+debian_version: stretch
+debian_repo: "http://mirror.yandex.ru/debian/"
+pve_repo_keyurl: "http://download.proxmox.com/debian/proxmox-ve-release-5.x.gpg"
+pve_repo_keyring: "/etc/apt/trusted.gpg.d/proxmox-ve-release-5.x.gpg"
+add_pve-no-subscription: True
+disable_pve-enterprise: True
