@@ -1,7 +1,7 @@
 pve_on_debian
 =========
 
-This role install on Debian system (current Stretch)
+This role will install on Debian system (current Stretch)
 
 Requirements
 ------------
@@ -13,14 +13,14 @@ Role Variables
 --------------
 
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-Default variables:
+defaults/main.yml:
 	ntp_pool: pool.ntp.org				# Pool of ntp-servers
 	timzone: Europe/Moscow				# Default timezone
 	debian_version: stretch				# Default release
 	debian_repo: "http://mirror.yandex.ru/debian/"	# Default repo address
 	add_pve-no-subscription: True			# Add pve-no-subscription repository
 	disable_pve-enterprise: True			# Disable commercial repo
-Variables:
+playbook vars( must be declared ):
 	proxmox_ip			# ip address for new instance of Proxmox
 	proxmox_mask			# network mask
 	proxmox_gateway			# default gateway
@@ -35,6 +35,7 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 
 Example Playbook
 ----------------
+
 ```yaml
 ---
 - hosts: proxmox_target
@@ -56,9 +57,10 @@ Example Playbook
 License
 -------
 
-BSD
+GPL v 3.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+https://tenhi.online
+Tenhi adm@tenhi.ru
