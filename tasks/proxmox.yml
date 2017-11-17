@@ -2,6 +2,9 @@
 
 - name: set hostname for the system
   hostname: name="{{ proxmox_hostname_fdqn }}"
+
+- name: refresh facts because hostname has been changed
+  setup:
       
 - name: modify /etc/hosts
   lineinfile:
