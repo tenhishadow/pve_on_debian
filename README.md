@@ -1,6 +1,9 @@
 pve_on_debian
 =========
 
+ХАБР
+https://habr.com/ru/post/342310/
+
 This role will install on Debian system 
 
 It's just an automation for this https://pve.proxmox.com/wiki/Install_Proxmox_VE_on_Debian_Stretch and some additionals to make system usable(Configure journald,chronyd)
