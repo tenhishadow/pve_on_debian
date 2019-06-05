@@ -1,6 +1,6 @@
 ---
 # Install and configure PVE
-- include: proxmox.yml
+- import_tasks: proxmox.yml
 
 # Configure system
-- include: system.yml
+- import_tasks: system.yml
