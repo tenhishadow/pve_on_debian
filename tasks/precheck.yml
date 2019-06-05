@@ -1,0 +1,12 @@
+---
+
+- name: ping hosts
+  ping:
+
+- name: ensure all hosts are reachable
+  run_once: yes
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+...

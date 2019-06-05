@@ -1,6 +1,98 @@
 ---
-# Install and configure PVE
-- include: proxmox.yml
 
-# Configure system
-- include: system.yml
+- name: do init checks
+  import_tasks: precheck.yml
+
+- name: set hostname for the system
+  hostname:
+    name: "{{ proxmox_hostname_fdqn }}"
+
+- name: refresh facts because hostname has been changed
+  setup:
+      
+- name: modify /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ proxmox_ip }} {{ ansible_hostname }} {{ ansible_fqdn }} pvelocalhost"
+  notify:
+  - reboot
+
+- name: add pve repository key
+  apt_key:
+    url: "{{ pve_repo_keyurl }}"
+    keyring: "{{ pve_repo_keyring }}"
+    state: present
+            
+- name: add pve-no-subscription repo
+  apt_repository:
+    repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
+    state: present
+    filename: 'pve-install-repo'
+
+- name: update system
+  apt:
+    upgrade: dist
+    update_cache: yes
+  notify:
+  - reboot
+
+- name: install proxmox packages
+  apt:
+    name:
+    - proxmox-ve
+    - postfix
+    - bridge-utils
+    state: present
+  notify:
+  - reboot
+
+- name: remove excess packages
+  apt: 
+    name:
+    - os-prober  # The os-prober package scans all the partitions of your host including those of you guests VMs to create dual-boot GRUB entries
+    - resolvconf # any package that auto-generates (overwrites) /etc/resolv.conf will cause DNS to fail e.g. packages 'resolvconf' for IPv4
+    - rdnssd     # and 'rdnssd' for IPv6
+    state: absent
+
+- name: search for standard kernels
+  shell: "$( which dpkg ) --get-selections linux-image* | $( which awk ) '/install/ { print $1 }'"
+  changed_when: no # do not mark it as CHANGED
+  args:
+    executable: /bin/bash
+  register: standart_kernels_installed
+
+- name: remove standard kernels if presented
+  apt:
+    name: "{{ item }}"
+    state: absent
+    force: yes # bear and mind that it will remove running kernel
+    purge: yes # and configs
+  loop:
+  - "{{ standart_kernels_installed.stdout_lines|default([]) }}"
+  when:
+  - standart_kernels_installed.stdout_lines | length > 0
+  notify:
+  - reboot
+
+- name: configure network from template
+  template:
+    backup: yes
+    src: templates/interfaces.j2
+    dest: "/etc/network/interfaces"
+    owner: root 
+    group: root
+    mode: 0644
+  when:
+  - not pve_skip_configure_network
+  notify:
+  - reboot # bridge configuraton cannot be applied by restarting networking service
+
+- name: remove enterprise repo
+  apt_repository:
+    repo: "deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise"
+    state: absent
+    filename: 'pve-enterprise'
+  when:
+  - disable_pve_enterprise
+
+...
