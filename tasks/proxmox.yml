@@ -82,21 +82,6 @@
   notify:
     - restart networking
 
-- name: rebooting the server
-  shell: nohup bash -c "sleep 2s && reboot" &
-  async: 0
-  poll: 0
-  ignore_errors: yes
-  register: reboot
-  tags: reboot
-
-- name: waiting for server to come back
-  local_action: wait_for host={{ proxmox_ip }} state=started
-  when: reboot.changed
-  async: 2400
-  poll: 10
-  tags: reboot
-
 - name: remove enterprise repo
   apt_repository:
     repo: "deb https://enterprise.proxmox.com/debian/pve {{debian_version}} pve-enterprise"
