@@ -9,7 +9,7 @@
 
 - name: refresh facts because hostname has been changed
   setup:
-      
+
 - name: modify /etc/hosts
   lineinfile:
     path: /etc/hosts
@@ -22,7 +22,7 @@
     url: "{{ pve_repo_keyurl }}"
     keyring: "{{ pve_repo_keyring }}"
     state: present
-            
+
 - name: add pve-no-subscription repo
   apt_repository:
     repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
@@ -47,7 +47,7 @@
   - reboot
 
 - name: remove excess packages
-  apt: 
+  apt:
     name:
     - os-prober  # The os-prober package scans all the partitions of your host including those of you guests VMs to create dual-boot GRUB entries
     - resolvconf # any package that auto-generates (overwrites) /etc/resolv.conf will cause DNS to fail e.g. packages 'resolvconf' for IPv4
@@ -55,7 +55,9 @@
     state: absent
 
 - name: search for standard kernels
-  shell: "$( which dpkg ) --get-selections linux-image* | $( which awk ) '/install/ { print $1 }'"
+  shell: |
+    set -o pipefail
+    $( which dpkg ) --get-selections linux-image* | $( which awk ) '/install/ { print $1 }'
   changed_when: no # do not mark it as CHANGED
   args:
     executable: /bin/bash
@@ -79,7 +81,7 @@
     backup: yes
     src: templates/interfaces.j2
     dest: "/etc/network/interfaces"
-    owner: root 
+    owner: root
     group: root
     mode: 0644
   when:
