@@ -16,6 +16,5 @@ galaxy_info:
     - proxmox
     - pve
     - virtualization
-    - "Proxmox Virtual Environment"
 
 ...
